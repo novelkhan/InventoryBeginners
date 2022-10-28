@@ -1,4 +1,5 @@
 ﻿using InventoryBeginners.Data;
+using InventoryBeginners.Interfaces;
 using InventoryBeginners.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -7,19 +8,58 @@ namespace InventoryBeginners.Controllers
 {
     public class UnitController : Controller
     {
-        private readonly InventoryContext _Context;
-        public UnitController(InventoryContext context)
+        //private readonly InventoryContext _context;
+        //public UnitController(InventoryContext context)
+        //{
+        //    _context = context;
+        //}
+
+        
+        private readonly IUnit _unitRepo;
+        public UnitController(IUnit unitrepo)
         {
-            _Context = context;
+            _unitRepo = unitrepo;
         }
+
+
+        //public IActionResult Index()
+        //{
+        //    List<Unit> units = _context.Units.ToList();
+        //    return View(units);
+        //}
 
 
         public IActionResult Index()
         {
-            List<Unit> units = _Context.Units.ToList();
-
+            List<Unit> units = _unitRepo.GetItems();
             return View(units);
         }
+
+
+
+        //[HttpGet]
+        //public IActionResult Create()
+        //{
+        //    Unit unit = new Unit();
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //public IActionResult Create(Unit unit)
+        //{
+        //    try
+        //    {
+        //        _context.Units.Add(unit);
+        //        _context.SaveChanges();
+        //    }
+        //    catch
+        //    {
+
+        //    }
+
+        //    return RedirectToAction(nameof(Index));
+        //}
+
 
 
 
@@ -35,8 +75,7 @@ namespace InventoryBeginners.Controllers
         {
             try
             {
-                _Context.Units.Add(unit);
-                _Context.SaveChanges();
+                unit = _unitRepo.Create(unit);
             }
             catch
             {
@@ -49,11 +88,46 @@ namespace InventoryBeginners.Controllers
 
 
 
+        //public IActionResult Details(int id)
+        //{
+        //    Unit unit = GetUnit(id);
+        //    return View(unit);
+        //}
+
+
         public IActionResult Details(int id)
         {
-            Unit unit = GetUnit(id);
+            Unit unit = _unitRepo.GetUnit(id);
             return View(unit);
         }
+
+
+
+
+        //[HttpGet]
+        //public IActionResult Edit(int id)
+        //{
+        //    Unit unit = GetUnit(id);
+        //    return View(unit);
+        //}
+
+        //[HttpPost]
+        //public IActionResult Edit(Unit unit)
+        //{
+        //    try
+        //    {
+        //        _context.Units.Attach(unit);
+        //        _context.Entry(unit).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+        //        _context.SaveChanges();
+        //    }
+        //    catch
+        //    {
+
+        //    }
+
+        //    return RedirectToAction(nameof(Index));
+        //}
+
 
 
 
@@ -61,7 +135,7 @@ namespace InventoryBeginners.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            Unit unit = GetUnit(id);
+            Unit unit = _unitRepo.GetUnit(id);
             return View(unit);
         }
 
@@ -70,9 +144,7 @@ namespace InventoryBeginners.Controllers
         {
             try
             {
-                _Context.Units.Attach(unit);
-                _Context.Entry(unit).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                _Context.SaveChanges();
+                unit = _unitRepo.Edit(unit);
             }
             catch
             {
@@ -82,6 +154,34 @@ namespace InventoryBeginners.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+
+
+
+
+        //[HttpGet]
+        //public IActionResult Delete(int id)
+        //{
+        //    Unit unit = _unitRepo.GetUnit(id);
+        //    return View(unit);
+        //}
+
+        //[HttpPost]
+        //public IActionResult Delete(Unit unit)
+        //{
+        //    try
+        //    {
+        //        _context.Units.Attach(unit);
+        //        _context.Entry(unit).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+        //        _context.SaveChanges();
+        //    }
+        //    catch
+        //    {
+
+        //    }
+
+        //    return RedirectToAction(nameof(Index));
+        //}
 
 
 
@@ -90,7 +190,7 @@ namespace InventoryBeginners.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            Unit unit = GetUnit(id);
+            Unit unit = _unitRepo.GetUnit(id);
             return View(unit);
         }
 
@@ -99,9 +199,7 @@ namespace InventoryBeginners.Controllers
         {
             try
             {
-                _Context.Units.Attach(unit);
-                _Context.Entry(unit).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                _Context.SaveChanges();
+                unit = _unitRepo.Delete(unit);
             }
             catch
             {
@@ -115,10 +213,10 @@ namespace InventoryBeginners.Controllers
 
 
 
-        private Unit GetUnit(int id)
-        {
-            Unit unit = _Context.Units.Where(u => u.Id == id).FirstOrDefault();
-            return unit;
-        }
+        //private Unit GetUnit(int id)
+        //{
+        //    Unit unit = _context.Units.Where(u => u.Id == id).FirstOrDefault();
+        //    return unit;
+        //}
     }
 }
